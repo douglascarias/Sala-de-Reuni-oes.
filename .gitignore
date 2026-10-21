@@ -1,0 +1,18 @@
+# Configuração com credenciais reais (nunca subir)
+config.php
+
+# Backups e dumps de banco com dados reais
+*.sql.bak
+backup/
+dump*.sql
+
+# Logs e arquivos temporários
+*.log
+error_log
+tmp/
+
+# Arquivos do sistema operacional e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
