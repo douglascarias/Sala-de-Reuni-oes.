@@ -1,0 +1,41 @@
+# =====================================================================
+#  Condex · Reserva de Salas — configuração Apache (Hostinger)
+# =====================================================================
+
+# Não listar o conteúdo das pastas
+Options -Indexes
+
+# Página inicial
+DirectoryIndex index.php
+
+# ---- Força HTTPS (deixe ativo; a Hostinger fornece SSL grátis) -------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- Bloqueia acesso direto aos diretórios internos ------------------
+RedirectMatch 404 ^/(app|sql)/
+RedirectMatch 404 /\.git
+
+# ---- Bloqueia arquivos sensíveis -------------------------------------
+<FilesMatch "\.(sql|md|log|ini|json|lock|bak|old)$">
+  Require all denied
+</FilesMatch>
+
+# ---- Cabeçalhos de segurança -----------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# ---- Cache dos arquivos estáticos ------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css            "access plus 7 days"
+  ExpiresByType application/javascript "access plus 7 days"
+</IfModule>
